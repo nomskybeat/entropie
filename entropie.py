@@ -6,7 +6,7 @@ from mpl_toolkits.mplot3d import Axes3D
 # Generate random temperatures for a mix of molecules
 np.random.seed(0)
 num_molecules = 100
-temperatures = np.random.uniform(200, 800, num_molecules)  # Temperatures between 200K and 800K
+temperatures = np.random.uniform(1, 99, num_molecules)  # Temperatures between 200K and 800K
 
 # Calculate the entropy for each temperature
 # For simplicity, assume a uniform probability distribution for each temperature
@@ -25,12 +25,12 @@ sc = ax.scatter(positions[:, 0], positions[:, 1], positions[:, 2], c=temperature
 
 # Add color bar to show temperature scale
 cbar = plt.colorbar(sc)
-cbar.set_label('Temperature (K)')
+cbar.set_label('Temperature (C)')
 
 # Set labels
 ax.set_xlabel('X Position')
 ax.set_ylabel('Y Position')
 ax.set_zlabel('Z Position')
-ax.set_title('Entropy Visualization of Molecules with Different Temperatures')
+ax.set_title('Entropie Visualisierung')
 
 plt.show()
