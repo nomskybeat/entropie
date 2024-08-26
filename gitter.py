@@ -2,8 +2,7 @@ import random as rnd
 
 rnd.randint(1,17)
 
-for int in 1:100
-    num = rnd.randint(1,17)
-
-    if num == 17:
-        print(num)
+# iterate 100 times and print if the random  number is 17
+for i in range(100):
+    if rnd.randint(1,17) == 17:
+        print("17")
