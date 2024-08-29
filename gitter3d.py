@@ -14,9 +14,9 @@ anzahl_koerper = 3
 x = 5
 y = 4
 z = 3
-anzahl_simulationen = 1000
+anzahl_simulationen = 10000
 
-entropie = 20
+entropie = 100
 
 #resultat liste initalisieren
 resultat = []
@@ -40,32 +40,50 @@ for s in range(anzahl_simulationen):
     #anzahl einer liste zufügen 
     resultat.append(int(anzahl1))
 
+import numpy as np
+import matplotlib.pyplot as plt
+
 # definiere Funktion, um gitter in 3D zu visualisieren
 def visualisiere_gitter(gitterliste):
     fig = plt.figure(figsize=(15, 5))
     
     for idx, gitter in enumerate(gitterliste):
-        ax = fig.add_subplot(1, 3, idx + 1, projection='3d')
+        y, x, z = gitter.shape  # Get the dimensions of the matrix
+        ax = fig.add_subplot(1, anzahl_koerper, idx + 1, projection='3d')
+        
+        # Plot all points in the grid
         for i in range(y):
             for j in range(x):
                 for k in range(z):
-                    #ax.scatter(j, i, k, c='b', s=gitter[i, j, k] * 10)
-                    marker_size = gitter[i, j, k] * 10 if gitter[i, j, k] != 0 else 1
-                    # wenn der Punkt 0 ist, dann grün, sonst blau
+                    # Set a small marker size for points with value 0
                     if gitter[i, j, k] == 0:
+                        marker_size = 10
                         ax.scatter(j, i, k, c='g', s=marker_size)
                     else:
+                        marker_size = gitter[i, j, k] * 100
                         ax.scatter(j, i, k, c='b', s=marker_size)
+        
+        # Plot grid lines within the body
+        for i in range(y):
+            for j in range(x):
+                ax.plot([j, j], [i, i], [0, z-1], color='gray', linestyle='--', linewidth=0.5)
+        for i in range(y):
+            for k in range(z):
+                ax.plot([0, x-1], [i, i], [k, k], color='gray', linestyle='--', linewidth=0.5)
+        for j in range(x):
+            for k in range(z):
+                ax.plot([j, j], [0, y-1], [k, k], color='gray', linestyle='--', linewidth=0.5)
         
         ax.set_xlabel('X Position')
         ax.set_ylabel('Y Position')
         ax.set_zlabel('Z Position')
         ax.set_title(f'Entropie Visualisierung Körper {idx + 1}')
 
+        # Set grid lines at every integer position
         ax.set_xticks(np.arange(0, x, 1))
         ax.set_yticks(np.arange(0, y, 1))
         ax.set_zticks(np.arange(0, z, 1))
-        ax.grid(True)
+        ax.grid(False)
     
     plt.tight_layout()
     plt.show()
