@@ -7,16 +7,18 @@ import matplotlib.pyplot as plt
 # random seed setzen (nicht reproduzierbar)
 rnd.seed()
 
+show_histo = True
+show_koerper = False
 
 
-anzahl_koerper = 3
+anzahl_koerper = 2
 # Anzahl Atome in x und y Richtung (pro Körper)
-x = 5
+x = 4
 y = 4
-z = 3
+z = 4
 anzahl_simulationen = 10000
 
-entropie = 100
+energie = 100
 
 #resultat liste initalisieren
 resultat = []
@@ -25,7 +27,7 @@ resultat = []
 for s in range(anzahl_simulationen):
     #gitter definieren: 2D array mit 2 x 8 Atomen (int)
     gitter = np.zeros((y , x * anzahl_koerper, z), dtype=int)
-    for i in range(entropie):
+    for i in range(energie):
         atom = (rnd.randint(0, y-1), rnd.randint(0, anzahl_koerper * x-1), rnd.randint(0, z-1))
         gitter[atom] += 1
 
@@ -90,30 +92,24 @@ def visualisiere_gitter(gitterliste):
     
 
 
-
-# Körper 1 - anzahl_koerper als matrix definieren
-gitterliste = []
-for i in range(anzahl_koerper):
-    gitter2 = gitter[:, i*(x):(i+1)*(x), :]
-    gitterliste.append(gitter2)
-visualisiere_gitter(gitterliste)
+if show_koerper:
+    # Körper 1 - anzahl_koerper als matrix definieren
+    gitterliste = []
+    for i in range(anzahl_koerper):
+        gitter2 = gitter[:, i*(x):(i+1)*(x), :]
+        gitterliste.append(gitter2)
+    visualisiere_gitter(gitterliste)
 
 # durchschnitt berechnen
 durchschnitt = sum(resultat) / len(resultat)
 print("Durchschnitt:", durchschnitt)
 
+if show_histo:
+    #histogramm erstellen
 
-#histogramm erstellen
-
-plt.hist(resultat, bins=range(0, entropie + 1))
-plt.title("Histogramm")
-plt.xlabel("Anzahl Atome 1. Körper")
-plt.ylabel("Häufigkeit")
-plt.show()
-
-
-
-
-
-
+    plt.hist(resultat, bins=range(0, energie + 1))
+    plt.title("Histogramm")
+    plt.xlabel("Anzahl Atome 1. Körper")
+    plt.ylabel("Häufigkeit")
+    plt.show()
 
