@@ -3,12 +3,15 @@
 import random as rnd
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
+from collections import Counter
 
 # random seed setzen (nicht reproduzierbar)
 rnd.seed()
 
 show_histo = True
 show_koerper = False
+show_pdf = True
 
 
 anzahl_koerper = 2
@@ -92,6 +95,11 @@ def visualisiere_gitter(gitterliste):
     
 
 
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Assuming the rest of your code is already defined
+
 if show_koerper:
     # Körper 1 - anzahl_koerper als matrix definieren
     gitterliste = []
@@ -105,11 +113,47 @@ durchschnitt = sum(resultat) / len(resultat)
 print("Durchschnitt:", durchschnitt)
 
 if show_histo:
-    #histogramm erstellen
+    # Create a figure with two subplots: one for the histogram and one for the Durchschnitt
+    if show_pdf:
+        fig, (ax_hist, ax_text, ax_prob) = plt.subplots(3, 1, gridspec_kw={'height_ratios': [4, 1, 4]}, figsize=(8, 6))
+    
+    else:
+        fig, (ax_hist, ax_text) = plt.subplots(2, 1, gridspec_kw={'height_ratios': [4, 1]}, figsize=(8, 6))
+    
+    # Histogramm erstellen
+    ax_hist.hist(resultat, bins=energie)
+    ax_hist.set_title(f"Histogramm von {anzahl_simulationen} Simulationen")
+    ax_hist.set_xlabel("Anzahl Energie 1. Körper")
+    ax_hist.set_ylabel("Häufigkeit/Anzahl Simulationen")
+    
+    
+    ax_hist.xaxis.set_major_locator(MaxNLocator(integer=True, prune='both', nbins=10))
+    ax_hist.yaxis.set_major_locator(MaxNLocator(integer=True, prune='both', nbins=10))
+    
+    
+    ax_text.axis('off')
+    
+    
+    ax_text.text(0.5, 0.5, f"Durchschnitt: {durchschnitt:.2f}", ha='center', va='center')
+    
+    plt.tight_layout()
+    
+    if show_pdf:
+        
+        # wahrscheinlichkeit berechnen
+        zaehler = Counter(resultat)
+        category_probabilities = {category: count / anzahl_simulationen for category, count in zaehler.items()}
 
-    plt.hist(resultat, bins=range(0, energie + 1))
-    plt.title("Histogramm")
-    plt.xlabel("Anzahl Atome 1. Körper")
-    plt.ylabel("Häufigkeit")
+        categories = list(category_probabilities.keys())
+        probabilities = list(category_probabilities.values())
+
+
+        plt.bar(categories, probabilities, color='g')
+        ax_prob.xaxis.set_major_locator(MaxNLocator(integer=True, prune='both', nbins=10))
+        ax_prob.yaxis.set_major_locator(MaxNLocator(integer=True, prune='both', nbins=10))
+        ax_prob.set_xlabel("Anzahl Energie 1. Körper")
+        ax_prob.set_ylabel("Wahrscheinlichkeit")
+        ax_prob.set_title("Wahrscheinlichkeit")
+    
+    plt.tight_layout()
     plt.show()
-
